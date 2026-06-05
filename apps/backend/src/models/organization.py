@@ -11,8 +11,12 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.db.base import Base
 
 if TYPE_CHECKING:
+    from src.models.alert import Alert
     from src.models.api_key import APIKey
+    from src.models.dashboard import Dashboard
     from src.models.event import Event
+    from src.models.notification import Notification
+    from src.models.report import Report
     from src.models.user import User
 
 
@@ -43,6 +47,26 @@ class Organization(Base):
         passive_deletes=True,
     )
     events: Mapped[list["Event"]] = relationship(
+        back_populates="organization",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+    dashboards: Mapped[list["Dashboard"]] = relationship(
+        back_populates="organization",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+    alerts: Mapped[list["Alert"]] = relationship(
+        back_populates="organization",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+    notifications: Mapped[list["Notification"]] = relationship(
+        back_populates="organization",
+        cascade="all, delete-orphan",
+        passive_deletes=True,
+    )
+    reports: Mapped[list["Report"]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,

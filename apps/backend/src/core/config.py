@@ -38,6 +38,8 @@ class Settings(BaseModel):
     jwt_algorithm: str = Field(default="HS256")
     access_token_expire_minutes: int = Field(default=15, ge=1)
     refresh_token_expire_days: int = Field(default=30, ge=1)
+    cors_origins: list[str] = Field(default=["http://localhost:3000"])
+    reports_dir: str = Field(default=str(BACKEND_DIR / "reports"))
 
     @computed_field
     @property
@@ -47,6 +49,13 @@ class Settings(BaseModel):
     @classmethod
     def from_env(cls) -> "Settings":
         load_env_file()
+
+        raw_cors = os.getenv("CORS_ORIGINS", "")
+        cors_origins = (
+            [o.strip() for o in raw_cors.split(",") if o.strip()]
+            if raw_cors
+            else cls.model_fields["cors_origins"].default
+        )
 
         settings = cls(
             app_name=os.getenv("APP_NAME", cls.model_fields["app_name"].default),
@@ -73,6 +82,8 @@ class Settings(BaseModel):
                     str(cls.model_fields["refresh_token_expire_days"].default),
                 )
             ),
+            cors_origins=cors_origins,
+            reports_dir=os.getenv("REPORTS_DIR", cls.model_fields["reports_dir"].default),
         )
         if settings.is_production and settings.jwt_secret_key == "change-me-in-production":
             raise RuntimeError("JWT_SECRET_KEY must be set in production.")

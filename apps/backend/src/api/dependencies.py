@@ -10,8 +10,28 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.core.security import decode_token, parse_api_key_id, verify_api_key
 from src.db.session import get_async_session
 from src.models import APIKey, Role, User
-from src.repositories import APIKeyRepository, EventRepository, OrganizationRepository, UserRepository
-from src.services import APIKeyService, EventIngestionService
+from src.repositories import (
+    AlertRepository,
+    AnalyticsRepository,
+    APIKeyRepository,
+    DashboardRepository,
+    EventRepository,
+    NotificationRepository,
+    OrganizationRepository,
+    ReportRepository,
+    UserRepository,
+    WidgetRepository,
+)
+from src.services import (
+    AlertService,
+    AnalyticsService,
+    APIKeyService,
+    DashboardService,
+    EventIngestionService,
+    NotificationService,
+    ReportService,
+    WidgetService,
+)
 from src.services.auth import AuthService
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
@@ -62,6 +82,62 @@ def get_event_ingestion_service(
     return EventIngestionService(
         session=session,
         event_repository=EventRepository(session),
+    )
+
+
+def get_dashboard_service(
+    session: AsyncSession = Depends(get_async_session),
+) -> DashboardService:
+    return DashboardService(
+        session=session,
+        dashboard_repository=DashboardRepository(session),
+    )
+
+
+def get_widget_service(
+    session: AsyncSession = Depends(get_async_session),
+) -> WidgetService:
+    return WidgetService(
+        session=session,
+        dashboard_repository=DashboardRepository(session),
+        widget_repository=WidgetRepository(session),
+    )
+
+
+def get_analytics_service(
+    session: AsyncSession = Depends(get_async_session),
+) -> AnalyticsService:
+    return AnalyticsService(
+        session=session,
+        analytics_repository=AnalyticsRepository(session),
+    )
+
+
+def get_alert_service(
+    session: AsyncSession = Depends(get_async_session),
+) -> AlertService:
+    return AlertService(
+        session=session,
+        alert_repository=AlertRepository(session),
+    )
+
+
+def get_notification_service(
+    session: AsyncSession = Depends(get_async_session),
+) -> NotificationService:
+    return NotificationService(
+        session=session,
+        notification_repository=NotificationRepository(session),
+    )
+
+
+def get_report_service(
+    session: AsyncSession = Depends(get_async_session),
+) -> ReportService:
+    return ReportService(
+        session=session,
+        report_repository=ReportRepository(session),
+        dashboard_repository=DashboardRepository(session),
     )
 
 
