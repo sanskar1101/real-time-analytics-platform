@@ -14,7 +14,7 @@ async def test_health_returns_expected_shape(client: AsyncClient) -> None:
     assert "status" in body
     assert "database" in body
     assert "redis" in body
-    assert body["status"] in ("ok", "degraded")
+    assert body["status"] in ("healthy", "unhealthy")
 
 
 @pytest.mark.asyncio
