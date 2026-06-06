@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -19,8 +19,8 @@ def _utc(dt: datetime | None) -> datetime | None:
     if dt is None:
         return None
     if dt.tzinfo is None:
-        return dt.replace(tzinfo=timezone.utc)
-    return dt.astimezone(timezone.utc)
+        return dt.replace(tzinfo=UTC)
+    return dt.astimezone(UTC)
 
 
 class AnalyticsService:
@@ -59,9 +59,7 @@ class AnalyticsService:
             start_date=_utc(start_date),
             end_date=_utc(end_date),
         )
-        return EventsByDayResponse(
-            items=[EventsByDayItem(date=d, count=c) for d, c in rows]
-        )
+        return EventsByDayResponse(items=[EventsByDayItem(date=d, count=c) for d, c in rows])
 
     async def get_events_by_type(
         self,

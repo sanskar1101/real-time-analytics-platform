@@ -17,9 +17,7 @@ if TYPE_CHECKING:
 
 class AlertHistory(Base):
     __tablename__ = "alert_histories"
-    __table_args__ = (
-        Index("ix_alert_histories_alert_id", "alert_id"),
-    )
+    __table_args__ = (Index("ix_alert_histories_alert_id", "alert_id"),)
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -43,4 +41,4 @@ class AlertHistory(Base):
         nullable=False,
     )
 
-    alert: Mapped["Alert"] = relationship("Alert", back_populates="history")
+    alert: Mapped[Alert] = relationship("Alert", back_populates="history")

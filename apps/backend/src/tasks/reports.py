@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from uuid import UUID
 
@@ -51,7 +51,7 @@ _DEFAULT_TABLE_STYLE = [
 
 
 def _period_for_frequency(frequency: ReportFrequency) -> tuple[datetime, datetime]:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     if frequency == ReportFrequency.DAILY:
         return now - timedelta(days=1), now
     if frequency == ReportFrequency.WEEKLY:
@@ -141,9 +141,7 @@ def _build_pdf(
 
     # ── KPI Summary ───────────────────────────────────────────────────────────
     story.append(Paragraph("KPI Summary", styles["heading"]))
-    error_rate = (
-        f"{error_events / total_events * 100:.1f}%" if total_events else "0.0%"
-    )
+    error_rate = f"{error_events / total_events * 100:.1f}%" if total_events else "0.0%"
     kpi_data = [
         ["Metric", "Value"],
         ["Total Events", str(total_events)],
@@ -156,9 +154,7 @@ def _build_pdf(
     # ── Events by Day ─────────────────────────────────────────────────────────
     story.append(Paragraph("Events by Day", styles["heading"]))
     if events_by_day:
-        day_data = [["Date", "Event Count"]] + [
-            [str(d), str(c)] for d, c in events_by_day
-        ]
+        day_data = [["Date", "Event Count"]] + [[str(d), str(c)] for d, c in events_by_day]
     else:
         day_data = [["Date", "Event Count"], ["No data for this period", "—"]]
     story.append(_make_table(day_data, [half_page, half_page]))
@@ -168,21 +164,14 @@ def _build_pdf(
     story.append(Paragraph("Top Event Types", styles["heading"]))
     top_types = events_by_type[:10]
     if top_types:
-        type_data = [["Event Type", "Count"]] + [
-            [name, str(count)] for name, count in top_types
-        ]
+        type_data = [["Event Type", "Count"]] + [[name, str(count)] for name, count in top_types]
     else:
         type_data = [["Event Type", "Count"], ["No data for this period", "—"]]
     type_table = Table(
         type_data,
         colWidths=[letter[0] - 1.5 * inch - 2.5 * inch, 2.5 * inch],
     )
-    type_table.setStyle(
-        TableStyle(
-            _DEFAULT_TABLE_STYLE
-            + [("ALIGN", (1, 0), (1, -1), "CENTER")]
-        )
-    )
+    type_table.setStyle(TableStyle(_DEFAULT_TABLE_STYLE + [("ALIGN", (1, 0), (1, -1), "CENTER")]))
     story.append(type_table)
 
     doc.build(story)

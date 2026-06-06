@@ -23,7 +23,10 @@ class ConnectionManager:
         self._connections[organization_id].add(websocket)
         logger.debug(
             "WebSocket connected.",
-            extra={"organization_id": str(organization_id), "total": len(self._connections[organization_id])},
+            extra={
+                "organization_id": str(organization_id),
+                "total": len(self._connections[organization_id]),
+            },
         )
 
     def disconnect(self, websocket: WebSocket, organization_id: UUID) -> None:

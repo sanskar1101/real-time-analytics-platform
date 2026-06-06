@@ -53,11 +53,7 @@ class NotificationRepository:
         if unread_only:
             base_where.append(Notification.is_read.is_(False))
 
-        count_stmt = (
-            select(func.count())
-            .select_from(Notification)
-            .where(*base_where)
-        )
+        count_stmt = select(func.count()).select_from(Notification).where(*base_where)
         total: int = (await self._session.execute(count_stmt)).scalar_one()
 
         stmt = (

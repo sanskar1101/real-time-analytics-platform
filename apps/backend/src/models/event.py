@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-from typing import Any, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, func, text
 from sqlalchemy.dialects.postgresql import JSONB, UUID
@@ -44,4 +44,4 @@ class Event(Base):
         nullable=False,
     )
 
-    organization: Mapped["Organization"] = relationship("Organization", back_populates="events")
+    organization: Mapped[Organization] = relationship("Organization", back_populates="events")

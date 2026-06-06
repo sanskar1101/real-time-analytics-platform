@@ -1,6 +1,18 @@
 from fastapi import APIRouter
 
-from src.api.routes import alerts, analytics, api_keys, auth, dashboards, events, notifications, public, reports, widgets, ws
+from src.api.routes import (
+    alerts,
+    analytics,
+    api_keys,
+    auth,
+    dashboards,
+    events,
+    notifications,
+    public,
+    reports,
+    widgets,
+    ws,
+)
 
 api_router = APIRouter(prefix="/api/v1")
 api_router.include_router(alerts.router)

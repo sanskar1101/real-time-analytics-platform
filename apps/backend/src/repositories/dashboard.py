@@ -3,8 +3,8 @@ from __future__ import annotations
 from uuid import UUID
 
 from sqlalchemy import func, select
-from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.orm import selectinload
 
 from src.models.dashboard import Dashboard
 

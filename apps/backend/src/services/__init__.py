@@ -1,4 +1,5 @@
 """Service layer."""
+
 from src.services.alert import AlertService
 from src.services.analytics import AnalyticsService
 from src.services.api_key import APIKeyService

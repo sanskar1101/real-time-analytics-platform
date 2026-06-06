@@ -36,37 +36,37 @@ class Organization(Base):
         nullable=False,
     )
 
-    users: Mapped[list["User"]] = relationship(
+    users: Mapped[list[User]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
-    api_keys: Mapped[list["APIKey"]] = relationship(
+    api_keys: Mapped[list[APIKey]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
-    events: Mapped[list["Event"]] = relationship(
+    events: Mapped[list[Event]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
-    dashboards: Mapped[list["Dashboard"]] = relationship(
+    dashboards: Mapped[list[Dashboard]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
-    alerts: Mapped[list["Alert"]] = relationship(
+    alerts: Mapped[list[Alert]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
-    notifications: Mapped[list["Notification"]] = relationship(
+    notifications: Mapped[list[Notification]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,
     )
-    reports: Mapped[list["Report"]] = relationship(
+    reports: Mapped[list[Report]] = relationship(
         back_populates="organization",
         cascade="all, delete-orphan",
         passive_deletes=True,

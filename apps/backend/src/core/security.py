@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
 import secrets
+from datetime import UTC, datetime, timedelta
 from typing import Any
 from uuid import UUID
 
@@ -57,7 +57,7 @@ def create_token(
     expires_delta: timedelta,
     extra_claims: dict[str, Any] | None = None,
 ) -> str:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     payload: dict[str, Any] = {
         "sub": str(subject),
         "org": str(organization_id),

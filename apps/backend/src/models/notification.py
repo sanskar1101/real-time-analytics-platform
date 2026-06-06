@@ -40,4 +40,6 @@ class Notification(Base):
         nullable=False,
     )
 
-    organization: Mapped["Organization"] = relationship("Organization", back_populates="notifications")
+    organization: Mapped[Organization] = relationship(
+        "Organization", back_populates="notifications"
+    )

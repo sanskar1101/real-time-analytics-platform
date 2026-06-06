@@ -16,9 +16,7 @@ if TYPE_CHECKING:
 
 class APIKey(Base):
     __tablename__ = "api_keys"
-    __table_args__ = (
-        Index("ix_api_keys_organization_id_name", "organization_id", "name"),
-    )
+    __table_args__ = (Index("ix_api_keys_organization_id_name", "organization_id", "name"),)
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -41,4 +39,4 @@ class APIKey(Base):
         nullable=False,
     )
 
-    organization: Mapped["Organization"] = relationship("Organization", back_populates="api_keys")
+    organization: Mapped[Organization] = relationship("Organization", back_populates="api_keys")

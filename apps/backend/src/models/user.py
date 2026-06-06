@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import uuid
 from datetime import datetime
-
 from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, DateTime, Enum, ForeignKey, Index, String, func, text
@@ -47,4 +46,4 @@ class User(Base):
         nullable=False,
     )
 
-    organization: Mapped["Organization"] = relationship("Organization", back_populates="users")
+    organization: Mapped[Organization] = relationship("Organization", back_populates="users")

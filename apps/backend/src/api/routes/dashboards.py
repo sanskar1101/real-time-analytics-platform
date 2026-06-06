@@ -4,9 +4,19 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, Query, status
 
-from src.api.dependencies import TenantContext, get_dashboard_service, get_tenant_context, get_widget_service
-from src.schemas.dashboard import DashboardCreate, DashboardRead, DashboardUpdate, PaginatedDashboards
-from src.schemas.widget import WidgetCreate, WidgetRead, WidgetUpdate
+from src.api.dependencies import (
+    TenantContext,
+    get_dashboard_service,
+    get_tenant_context,
+    get_widget_service,
+)
+from src.schemas.dashboard import (
+    DashboardCreate,
+    DashboardRead,
+    DashboardUpdate,
+    PaginatedDashboards,
+)
+from src.schemas.widget import WidgetCreate, WidgetRead
 from src.services.dashboard import DashboardService, WidgetService
 
 router = APIRouter(prefix="/dashboards", tags=["Dashboards"])

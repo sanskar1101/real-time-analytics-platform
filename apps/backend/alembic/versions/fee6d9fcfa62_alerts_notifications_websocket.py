@@ -4,14 +4,12 @@ Revision ID: fee6d9fcfa62
 Revises: f27db2f0feab
 Create Date: 2026-06-06 00:01:33.877643
 """
-from typing import Sequence, Union
 
-from alembic import op
-import sqlalchemy as sa
+from collections.abc import Sequence
+from typing import Union
 
-
-revision: str = 'fee6d9fcfa62'
-down_revision: Union[str, None] = 'f27db2f0feab'
+revision: str = "fee6d9fcfa62"
+down_revision: Union[str, None] = "f27db2f0feab"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

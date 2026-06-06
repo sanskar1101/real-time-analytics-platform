@@ -32,5 +32,7 @@ async def _process_event(event_id: UUID) -> bool:
             event_repository=EventRepository(session),
         )
         processed = await service.mark_processed(event_id)
-        logger.info("Event processing completed.", extra={"event_id": str(event_id), "processed": processed})
+        logger.info(
+            "Event processing completed.", extra={"event_id": str(event_id), "processed": processed}
+        )
         return processed

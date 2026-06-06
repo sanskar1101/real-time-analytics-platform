@@ -21,9 +21,7 @@ class AnalyticsRepository:
         end_date: datetime | None = None,
     ) -> int:
         stmt = (
-            select(func.count())
-            .select_from(Event)
-            .where(Event.organization_id == organization_id)
+            select(func.count()).select_from(Event).where(Event.organization_id == organization_id)
         )
         if start_date is not None:
             stmt = stmt.where(Event.event_timestamp >= start_date)
@@ -40,9 +38,8 @@ class AnalyticsRepository:
         end_date: datetime | None = None,
     ) -> list[tuple[date, int]]:
         day_col = func.date_trunc("day", Event.event_timestamp).label("day")
-        stmt = (
-            select(day_col, func.count().label("count"))
-            .where(Event.organization_id == organization_id)
+        stmt = select(day_col, func.count().label("count")).where(
+            Event.organization_id == organization_id
         )
         if start_date is not None:
             stmt = stmt.where(Event.event_timestamp >= start_date)
@@ -59,9 +56,8 @@ class AnalyticsRepository:
         start_date: datetime | None = None,
         end_date: datetime | None = None,
     ) -> list[tuple[str, int]]:
-        stmt = (
-            select(Event.event_name, func.count().label("count"))
-            .where(Event.organization_id == organization_id)
+        stmt = select(Event.event_name, func.count().label("count")).where(
+            Event.organization_id == organization_id
         )
         if start_date is not None:
             stmt = stmt.where(Event.event_timestamp >= start_date)

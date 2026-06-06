@@ -4,7 +4,18 @@ import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Boolean, DateTime, Enum, Float, ForeignKey, Index, Integer, String, func, text
+from sqlalchemy import (
+    Boolean,
+    DateTime,
+    Enum,
+    Float,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    func,
+    text,
+)
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -19,9 +30,7 @@ if TYPE_CHECKING:
 
 class Alert(Base):
     __tablename__ = "alerts"
-    __table_args__ = (
-        Index("ix_alerts_organization_id", "organization_id"),
-    )
+    __table_args__ = (Index("ix_alerts_organization_id", "organization_id"),)
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -36,7 +45,9 @@ class Alert(Base):
     )
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     metric_type: Mapped[AlertMetricType] = mapped_column(
-        Enum(AlertMetricType, name="alertmetrictype", values_callable=lambda e: [i.value for i in e]),
+        Enum(
+            AlertMetricType, name="alertmetrictype", values_callable=lambda e: [i.value for i in e]
+        ),
         nullable=False,
     )
     threshold: Mapped[float] = mapped_column(Float, nullable=False)
@@ -54,8 +65,8 @@ class Alert(Base):
         nullable=False,
     )
 
-    organization: Mapped["Organization"] = relationship("Organization", back_populates="alerts")
-    history: Mapped[list["AlertHistory"]] = relationship(
+    organization: Mapped[Organization] = relationship("Organization", back_populates="alerts")
+    history: Mapped[list[AlertHistory]] = relationship(
         "AlertHistory",
         back_populates="alert",
         cascade="all, delete-orphan",

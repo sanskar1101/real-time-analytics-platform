@@ -9,7 +9,12 @@ from src.models.dashboard import Dashboard
 from src.models.widget import Widget
 from src.repositories.dashboard import DashboardRepository
 from src.repositories.widget import WidgetRepository
-from src.schemas.dashboard import DashboardCreate, DashboardRead, DashboardUpdate, PaginatedDashboards
+from src.schemas.dashboard import (
+    DashboardCreate,
+    DashboardRead,
+    DashboardUpdate,
+    PaginatedDashboards,
+)
 from src.schemas.widget import WidgetCreate, WidgetUpdate
 
 
@@ -71,18 +76,14 @@ class DashboardService:
         organization_id: UUID,
         payload: DashboardUpdate,
     ) -> Dashboard:
-        dashboard = await self.get(
-            dashboard_id=dashboard_id, organization_id=organization_id
-        )
+        dashboard = await self.get(dashboard_id=dashboard_id, organization_id=organization_id)
         for field, value in payload.model_dump(exclude_unset=True).items():
             setattr(dashboard, field, value)
         await self._session.commit()
         return dashboard
 
     async def delete(self, *, dashboard_id: UUID, organization_id: UUID) -> None:
-        dashboard = await self.get(
-            dashboard_id=dashboard_id, organization_id=organization_id
-        )
+        dashboard = await self.get(dashboard_id=dashboard_id, organization_id=organization_id)
         await self._dashboards.delete(dashboard)
         await self._session.commit()
 
@@ -99,9 +100,7 @@ class WidgetService:
         self._dashboards = dashboard_repository
         self._widgets = widget_repository
 
-    async def _require_dashboard(
-        self, *, dashboard_id: UUID, organization_id: UUID
-    ) -> Dashboard:
+    async def _require_dashboard(self, *, dashboard_id: UUID, organization_id: UUID) -> Dashboard:
         dashboard = await self._dashboards.get_by_id_and_org(
             dashboard_id=dashboard_id,
             organization_id=organization_id,
@@ -113,9 +112,7 @@ class WidgetService:
             )
         return dashboard
 
-    async def _require_widget_in_org(
-        self, *, widget_id: UUID, organization_id: UUID
-    ) -> Widget:
+    async def _require_widget_in_org(self, *, widget_id: UUID, organization_id: UUID) -> Widget:
         widget = await self._widgets.get_by_id(widget_id)
         if widget is None:
             raise HTTPException(
@@ -135,9 +132,7 @@ class WidgetService:
         organization_id: UUID,
         payload: WidgetCreate,
     ) -> Widget:
-        await self._require_dashboard(
-            dashboard_id=dashboard_id, organization_id=organization_id
-        )
+        await self._require_dashboard(dashboard_id=dashboard_id, organization_id=organization_id)
         widget = await self._widgets.create(
             dashboard_id=dashboard_id,
             name=payload.name,
@@ -153,9 +148,7 @@ class WidgetService:
         return widget
 
     async def list(self, *, dashboard_id: UUID, organization_id: UUID) -> list[Widget]:
-        await self._require_dashboard(
-            dashboard_id=dashboard_id, organization_id=organization_id
-        )
+        await self._require_dashboard(dashboard_id=dashboard_id, organization_id=organization_id)
         return await self._widgets.list_by_dashboard(dashboard_id)
 
     async def update(

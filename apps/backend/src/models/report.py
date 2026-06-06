@@ -58,7 +58,5 @@ class Report(Base):
         nullable=False,
     )
 
-    organization: Mapped["Organization"] = relationship(
-        "Organization", back_populates="reports"
-    )
-    dashboard: Mapped["Dashboard"] = relationship("Dashboard")
+    organization: Mapped[Organization] = relationship("Organization", back_populates="reports")
+    dashboard: Mapped[Dashboard] = relationship("Dashboard")

@@ -18,9 +18,7 @@ if TYPE_CHECKING:
 
 class Widget(Base):
     __tablename__ = "widgets"
-    __table_args__ = (
-        Index("ix_widgets_dashboard_id", "dashboard_id"),
-    )
+    __table_args__ = (Index("ix_widgets_dashboard_id", "dashboard_id"),)
 
     id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True),
@@ -53,4 +51,4 @@ class Widget(Base):
         nullable=False,
     )
 
-    dashboard: Mapped["Dashboard"] = relationship("Dashboard", back_populates="widgets")
+    dashboard: Mapped[Dashboard] = relationship("Dashboard", back_populates="widgets")

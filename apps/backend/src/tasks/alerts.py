@@ -3,7 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from uuid import UUID
 
 import redis as sync_redis
@@ -58,7 +58,7 @@ async def _evaluate_single_alert(
     alert_repo: AlertRepository,
     notification_repo: NotificationRepository,
 ) -> None:
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     window_start = now - timedelta(minutes=alert.window_minutes)
 
     metric_value = await _compute_metric(session, alert, window_start, now)

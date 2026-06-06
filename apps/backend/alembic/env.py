@@ -3,11 +3,11 @@ from __future__ import annotations
 import asyncio
 from logging.config import fileConfig
 
-from alembic import context
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 
+from alembic import context
 from src.core.config import settings
 from src.db.base import Base
 from src.models import (  # noqa: F401 — imported to register tables with Base.metadata

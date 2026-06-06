@@ -4,11 +4,14 @@ Revision ID: 20260604_0001
 Revises:
 Create Date: 2026-06-04
 """
-from typing import Sequence, Union
 
-from alembic import op
+from collections.abc import Sequence
+from typing import Union
+
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
+
+from alembic import op
 
 revision: str = "20260604_0001"
 down_revision: Union[str, None] = None

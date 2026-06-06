@@ -6,7 +6,6 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field, computed_field
 
-
 BACKEND_DIR = Path(__file__).resolve().parents[2]
 ENV_FILE = BACKEND_DIR / ".env"
 
@@ -48,7 +47,7 @@ class Settings(BaseModel):
         return self.environment.lower() == "production"
 
     @classmethod
-    def from_env(cls) -> "Settings":
+    def from_env(cls) -> Settings:
         load_env_file()
 
         raw_cors = os.getenv("CORS_ORIGINS", "")

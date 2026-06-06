@@ -41,8 +41,7 @@ class EventIngestionService:
             organization_id=api_key.organization_id,
             source=api_key.name,
             events=[
-                (event.event_name, event.event_timestamp, event.payload)
-                for event in payload.events
+                (event.event_name, event.event_timestamp, event.payload) for event in payload.events
             ],
         )
         await self._session.commit()

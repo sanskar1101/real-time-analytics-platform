@@ -58,9 +58,7 @@ class AlertRepository:
         offset: int,
     ) -> tuple[list[Alert], int]:
         count_stmt = (
-            select(func.count())
-            .select_from(Alert)
-            .where(Alert.organization_id == organization_id)
+            select(func.count()).select_from(Alert).where(Alert.organization_id == organization_id)
         )
         total: int = (await self._session.execute(count_stmt)).scalar_one()
 
