@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class AlertStatus(str, Enum):
+class AlertStatus(StrEnum):
     ACTIVE = "ACTIVE"
     TRIGGERED = "TRIGGERED"
     RESOLVED = "RESOLVED"

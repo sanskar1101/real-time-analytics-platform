@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import enum
+from enum import StrEnum
 
 
-class ReportFrequency(str, enum.Enum):
+class ReportFrequency(StrEnum):
     DAILY = "DAILY"
     WEEKLY = "WEEKLY"
     MONTHLY = "MONTHLY"

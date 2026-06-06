@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class WidgetType(str, Enum):
+class WidgetType(StrEnum):
     KPI = "KPI"
     LINE = "LINE"
     BAR = "BAR"

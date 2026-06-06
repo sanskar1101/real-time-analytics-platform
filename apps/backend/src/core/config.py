@@ -65,7 +65,7 @@ class Settings(BaseModel):
         )
 
         db_url = os.getenv("DATABASE_URL", cls.model_fields["database_url"].default)
-        # Render managed PostgreSQL provides a plain postgresql:// DSN; asyncpg requires the +asyncpg driver prefix.
+        # Render provides plain postgresql:// DSN; asyncpg requires the +asyncpg driver prefix.
         if db_url.startswith("postgresql://"):
             db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
 
