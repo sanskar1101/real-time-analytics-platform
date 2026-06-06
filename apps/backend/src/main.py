@@ -29,7 +29,12 @@ async def _redis_subscriber() -> None:
         settings.redis_url, decode_responses=True, protocol=2, health_check_interval=0
     )
     pubsub = client.pubsub()
-    await pubsub.psubscribe("notifications:*")
+    try:
+        await pubsub.psubscribe("notifications:*")
+    except Exception:
+        logger.exception("Redis subscriber failed to connect; live notifications disabled.")
+        await client.aclose()
+        return
     logger.info("Redis notification subscriber started.")
     try:
         async for message in pubsub.listen():
@@ -44,9 +49,13 @@ async def _redis_subscriber() -> None:
                 logger.exception("Error forwarding notification.", extra={"channel": channel})
     except asyncio.CancelledError:
         logger.info("Redis notification subscriber shutting down.")
+    except Exception:
+        logger.exception("Redis notification subscriber crashed.")
     finally:
-        await pubsub.punsubscribe("notifications:*")
-        await client.aclose()
+        with contextlib.suppress(Exception):
+            await pubsub.punsubscribe("notifications:*")
+        with contextlib.suppress(Exception):
+            await client.aclose()
 
 
 @asynccontextmanager
@@ -56,7 +65,7 @@ async def lifespan(app: FastAPI):
         yield
     finally:
         subscriber_task.cancel()
-        with contextlib.suppress(asyncio.CancelledError):
+        with contextlib.suppress(asyncio.CancelledError, Exception):
             await subscriber_task
 
 
