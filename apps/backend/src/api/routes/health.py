@@ -17,7 +17,7 @@ router = APIRouter(tags=["Health"])
 
 @router.get("/health", include_in_schema=True)
 async def health_check() -> JSONResponse:
-    result: dict[str, str] = {"status": "ok", "database": "ok", "redis": "ok"}
+    result: dict[str, str] = {"status": "healthy", "database": "ok", "redis": "ok"}
     healthy = True
 
     try:
@@ -38,7 +38,7 @@ async def health_check() -> JSONResponse:
         healthy = False
 
     if not healthy:
-        result["status"] = "degraded"
+        result["status"] = "unhealthy"
 
     return JSONResponse(
         content=result,

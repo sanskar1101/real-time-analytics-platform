@@ -39,6 +39,7 @@ class Settings(BaseModel):
     access_token_expire_minutes: int = Field(default=15, ge=1)
     refresh_token_expire_days: int = Field(default=30, ge=1)
     cors_origins: list[str] = Field(default=["http://localhost:3000"])
+    allowed_hosts: list[str] = Field(default=["*"])
     reports_dir: str = Field(default=str(BACKEND_DIR / "reports"))
 
     @computed_field
@@ -57,10 +58,22 @@ class Settings(BaseModel):
             else cls.model_fields["cors_origins"].default
         )
 
+        raw_hosts = os.getenv("ALLOWED_HOSTS", "")
+        allowed_hosts = (
+            [h.strip() for h in raw_hosts.split(",") if h.strip()]
+            if raw_hosts
+            else cls.model_fields["allowed_hosts"].default
+        )
+
+        db_url = os.getenv("DATABASE_URL", cls.model_fields["database_url"].default)
+        # Render managed PostgreSQL provides a plain postgresql:// DSN; asyncpg requires the +asyncpg driver prefix.
+        if db_url.startswith("postgresql://"):
+            db_url = db_url.replace("postgresql://", "postgresql+asyncpg://", 1)
+
         settings = cls(
             app_name=os.getenv("APP_NAME", cls.model_fields["app_name"].default),
             environment=os.getenv("ENVIRONMENT", cls.model_fields["environment"].default),
-            database_url=os.getenv("DATABASE_URL", cls.model_fields["database_url"].default),
+            database_url=db_url,
             redis_url=os.getenv("REDIS_URL", cls.model_fields["redis_url"].default),
             jwt_secret_key=os.getenv(
                 "JWT_SECRET_KEY",
@@ -83,6 +96,7 @@ class Settings(BaseModel):
                 )
             ),
             cors_origins=cors_origins,
+            allowed_hosts=allowed_hosts,
             reports_dir=os.getenv("REPORTS_DIR", cls.model_fields["reports_dir"].default),
         )
         if settings.is_production and settings.jwt_secret_key == "change-me-in-production":

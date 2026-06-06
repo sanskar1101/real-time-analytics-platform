@@ -10,6 +10,7 @@ from uuid import UUID
 import redis.asyncio as aioredis
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.trustedhost import TrustedHostMiddleware
 
 from src.api.router import api_router
 from src.api.routes.health import router as health_router
@@ -73,6 +74,8 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    if settings.is_production:
+        app.add_middleware(TrustedHostMiddleware, allowed_hosts=settings.allowed_hosts)
     app.include_router(health_router)
     app.include_router(api_router)
     return app

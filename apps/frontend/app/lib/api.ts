@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:8000'
+const WS_BASE_URL = process.env.NEXT_PUBLIC_WS_URL ?? BASE_URL.replace(/^http/, 'ws')
 
 const TOKEN_COOKIE_MAX_AGE = 60 * 60 * 24 // 1 day
 
@@ -65,7 +66,6 @@ export function getAccessToken(): string | null {
 }
 
 export function getWsUrl(): string {
-  const wsBase = BASE_URL.replace(/^http/, 'ws')
   const token = getAccessToken()
-  return `${wsBase}/api/v1/ws/notifications${token ? `?token=${token}` : ''}`
+  return `${WS_BASE_URL}/api/v1/ws/notifications${token ? `?token=${token}` : ''}`
 }
