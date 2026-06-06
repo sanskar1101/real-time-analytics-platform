@@ -29,7 +29,12 @@ async def health_check() -> JSONResponse:
         healthy = False
 
     try:
-        client = aioredis.from_url(settings.redis_url, socket_connect_timeout=2, protocol=2)
+        client = aioredis.from_url(
+            settings.redis_url,
+            socket_connect_timeout=2,
+            protocol=2,
+            health_check_interval=0,
+        )
         await client.ping()
         await client.aclose()
     except Exception:

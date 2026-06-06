@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 async def _redis_subscriber() -> None:
-    client = aioredis.from_url(settings.redis_url, decode_responses=True, protocol=2)
+    client = aioredis.from_url(settings.redis_url, decode_responses=True, protocol=2, health_check_interval=0)
     pubsub = client.pubsub()
     await pubsub.psubscribe("notifications:*")
     logger.info("Redis notification subscriber started.")
